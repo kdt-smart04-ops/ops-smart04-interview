@@ -6,7 +6,7 @@ Google Drive 상위 폴더 아래의 학생별 취업서류 준비 현황을 수
 
 ## 확정 조건
 
-- 배포 위치: GitHub 저장소 `__OWNER__/ops-smart04-interview`
+- 배포 위치: GitHub 저장소 `kdt-smart04-ops/ops-smart04-interview`
 - 배포 형태: GitHub Pages 정적 웹페이지, Source는 GitHub Actions
 - 데이터 갱신: GitHub Actions로 1시간마다 자동 실행, `workflow_dispatch`로 수동 실행
 - 인증 방식: Google OAuth refresh token 기반 Drive 조회
