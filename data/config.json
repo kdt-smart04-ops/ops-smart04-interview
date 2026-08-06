@@ -1,0 +1,25 @@
+{
+  "sourceFolderId": "1QVu32ml63woeOYnObiPu5TWj6WCtuNg2",
+  "interviewSourceFolderId": "1w3WTjDyAbZr_zwyuIBfTHOAftU-iQ35K",
+  "interviewNameAliases": {},
+  "documentTypes": [
+    {
+      "id": "application",
+      "label": "입사지원서",
+      "folderName": "입사지원서",
+      "showChart": true
+    },
+    {
+      "id": "portfolio",
+      "label": "포트폴리오",
+      "folderName": "포트폴리오",
+      "showChart": true
+    },
+    {
+      "id": "interview",
+      "label": "면접자료",
+      "folderName": "면접자료",
+      "showChart": true
+    }
+  ]
+}
