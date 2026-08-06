@@ -2,6 +2,24 @@
   "sourceFolderId": "1QVu32ml63woeOYnObiPu5TWj6WCtuNg2",
   "interviewSourceFolderId": "1w3WTjDyAbZr_zwyuIBfTHOAftU-iQ35K",
   "interviewNameAliases": {},
+  "_excludedStudentNames_주석": "모의면접 비대상자. 대시보드에서만 제외하며 Drive 폴더는 건드리지 않는다.",
+  "excludedStudentNames": [
+    "강현우",
+    "김은진",
+    "김영빈",
+    "김태욱",
+    "박언약",
+    "송근형",
+    "신하용",
+    "이상현",
+    "이승열",
+    "이종현",
+    "장지훈",
+    "정승우",
+    "정우혁",
+    "조진행",
+    "최동훈"
+  ],
   "documentTypes": [
     {
       "id": "application",

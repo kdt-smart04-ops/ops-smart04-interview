@@ -314,6 +314,22 @@ def build_dashboard(config: dict[str, Any], manual_status: dict[str, Any]) -> di
     debug_student_name = os.getenv("DEBUG_STUDENT_NAME", "").strip()
     service = drive_service()
     student_folders = list_children(service, root_folder_id, folders_only=True)
+
+    excluded = {normalize_student_match_key(name) for name in config.get("excludedStudentNames", [])}
+    if excluded:
+        matched = {
+            normalize_student_match_key(folder["name"])
+            for folder in student_folders
+            if normalize_student_match_key(folder["name"]) in excluded
+        }
+        for key in sorted(excluded - matched):
+            print(f"WARNING excluded name not found in Drive: {key!r}")
+        student_folders = [
+            folder for folder in student_folders
+            if normalize_student_match_key(folder["name"]) not in excluded
+        ]
+        print(f"INFO excluded {len(matched)} student(s) by config")
+
     early_ids = set(manual_status.get("earlyEmployedStudentIds", []))
 
     interview_type = next(
