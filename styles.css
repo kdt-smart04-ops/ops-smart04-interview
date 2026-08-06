@@ -285,13 +285,18 @@ button:focus-visible {
 }
 
 .badge.missing {
-  color: #8d2929;
-  background: #f8dfdf;
+  color: #8a6410;
+  background: #fbeecb;
 }
 
 .badge.early {
-  color: #7a4d0c;
-  background: #faeccf;
+  color: #17527f;
+  background: #d8e8f6;
+}
+
+.badge.na {
+  color: #5c636b;
+  background: #e8eaed;
 }
 
 .doc-list {

@@ -13,13 +13,22 @@ const state = {
 };
 
 const STATUS = {
-  submitted: { label: "작성", color: "#2f8f63" },
-  missing: { label: "미작성", color: "#c84f4f" },
-  early_employed: { label: "취업", color: "#d99a2b" },
+  submitted: { label: "작성완료", color: "#2f8f63" },
+  missing: { label: "작성중", color: "#d9a227" },
+  early_employed: { label: "취업", color: "#3b82c4" },
   not_applicable: { label: "미대상", color: "#8a919a" },
 };
 
 const CHART_STATUS_KEYS = ["submitted", "missing", "early_employed"];
+
+const INTERVIEW_DOCUMENT_ID = "interview";
+
+const BADGE_CLASS = {
+  submitted: "submitted",
+  missing: "missing",
+  early_employed: "early",
+  not_applicable: "na",
+};
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -135,7 +144,7 @@ function renderSummary() {
 
   [
     ["전체 학생", `${students.length}명`],
-    ["미작성", `${missingCount}명`],
+    [STATUS.missing.label, `${missingCount}명`],
     ["취업", `${earlyCount}명`],
   ].forEach(([label, value]) => {
     const item = document.createElement("div");
@@ -225,7 +234,7 @@ function drawDoughnut(canvas, counts) {
   ctx.fillText(`${percent}%`, center, center - 8);
   ctx.fillStyle = "#69717c";
   ctx.font = "12px system-ui, sans-serif";
-  ctx.fillText("작성", center, center + 18);
+  ctx.fillText(STATUS.submitted.label, center, center + 18);
 }
 
 function renderLegend(legend, counts, total) {
@@ -260,11 +269,9 @@ function renderStudents() {
     button.className = "student-card";
     button.addEventListener("click", () => openStudentModal(student.id));
 
-    const badge = isEarlyEmployed(student)
-      ? `<span class="badge early">취업</span>`
-      : `<span class="badge ${overallSubmitted(student) ? "submitted" : "missing"}">${
-          overallSubmitted(student) ? "작성중" : "미작성"
-        }</span>`;
+    // 카드 대표 상태는 '면접자료 폴더' 기준이다 — 이 대시보드의 목적이 모의면접 준비 현황이기 때문.
+    const cardStatus = getDocStatus(student, INTERVIEW_DOCUMENT_ID);
+    const badge = `<span class="badge ${BADGE_CLASS[cardStatus]}">${STATUS[cardStatus].label}</span>`;
 
     button.innerHTML = `
       <div class="card-top">

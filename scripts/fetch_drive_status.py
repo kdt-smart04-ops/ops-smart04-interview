@@ -15,6 +15,7 @@ from googleapiclient.discovery import build
 
 
 FOLDER_MIME_TYPE = "application/vnd.google-apps.folder"
+PDF_MIME_TYPE = "application/pdf"
 SHORTCUT_MIME_TYPE = "application/vnd.google-apps.shortcut"
 DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.metadata.readonly"
 SEOUL = ZoneInfo("Asia/Seoul")
@@ -187,7 +188,36 @@ def build_document_entry(service, student_folders: list[dict[str, Any]], doc_typ
     }
 
 
-def build_interview_entry(service, interview_folder: dict[str, Any] | None) -> dict[str, Any]:
+def effective_mime_type(item: dict[str, Any]) -> str:
+    details = item.get("shortcutDetails") or {}
+    return details.get("targetMimeType") or item.get("mimeType") or ""
+
+
+def is_pdf(item: dict[str, Any]) -> bool:
+    if effective_mime_type(item) == PDF_MIME_TYPE:
+        return True
+    return normalize_spaces(item.get("name", "")).lower().endswith(".pdf")
+
+
+def interview_status(files: list[dict[str, Any]], rules: dict[str, Any]) -> str:
+    """3종 서류가 모두 있고 미완성 표기가 없을 때만 submitted."""
+    if not files:
+        return "missing"
+
+    incomplete = rules.get("incompletePattern")
+    if incomplete and any(re.search(incomplete, item["name"]) for item in files):
+        return "missing"
+
+    candidates = [item for item in files if is_pdf(item)] if rules.get("pdfOnly", True) else files
+    for pattern in rules.get("requiredFilePatterns", []):
+        if not any(re.search(pattern, item["name"]) for item in candidates):
+            return "missing"
+    return "submitted"
+
+
+def build_interview_entry(
+    service, interview_folder: dict[str, Any] | None, rules: dict[str, Any]
+) -> dict[str, Any]:
     if not interview_folder:
         return empty_document_entry("not_applicable")
 
@@ -197,7 +227,7 @@ def build_interview_entry(service, interview_folder: dict[str, Any] | None) -> d
     latest = latest_file(valid_files)
     latest_id = effective_id(latest)
     return {
-        "status": "submitted" if latest else "missing",
+        "status": interview_status(valid_files, rules),
         "folderId": folder_id,
         "folderUrl": drive_folder_url(folder_id),
         "latestFileName": latest["name"] if latest else None,
@@ -377,7 +407,9 @@ def build_dashboard(config: dict[str, Any], manual_status: dict[str, Any]) -> di
             for doc_type in regular_document_types
         }
         if interview_type:
-            documents[INTERVIEW_DOCUMENT_ID] = build_interview_entry(service, interview_folder)
+            documents[INTERVIEW_DOCUMENT_ID] = build_interview_entry(
+                service, interview_folder, config.get("interviewRequirements", {})
+            )
 
         students.append(
             {

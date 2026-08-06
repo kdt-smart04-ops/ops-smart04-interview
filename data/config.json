@@ -2,6 +2,12 @@
   "sourceFolderId": "1QVu32ml63woeOYnObiPu5TWj6WCtuNg2",
   "interviewSourceFolderId": "1w3WTjDyAbZr_zwyuIBfTHOAftU-iQ35K",
   "interviewNameAliases": {},
+  "_interviewRequirements_주석": "모의면접 폴더 판정 기준. 3종이 PDF로 모두 있고 미완성 표기가 없어야 작성완료.",
+  "interviewRequirements": {
+    "pdfOnly": true,
+    "requiredFilePatterns": ["이력서", "자기소개서|자소서", "포트폴리오|포폴"],
+    "incompletePattern": "미완성|미완료|미제출|초안|임시"
+  },
   "_excludedStudentNames_주석": "모의면접 비대상자. 대시보드에서만 제외하며 Drive 폴더는 건드리지 않는다.",
   "excludedStudentNames": [
     "강현우",
